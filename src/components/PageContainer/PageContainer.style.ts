@@ -7,10 +7,4 @@ export const Wrapper = styled.main`
     display: flex;
     flex-direction: column;
     align-items: center;
-
-  .heading {
-    font-size: 1.5em;
-    font-weight: 400;
-    padding: 15px 0;
-  }
 `;

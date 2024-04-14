@@ -6,21 +6,21 @@ export const GlobalStyle = createGlobalStyle`
   --bg-color: #DAE4ED;
   --navbar-color: #DDEAF3;
   --searchbar-color:#ffffff;
-  --text-color: #333333;
+  --text-color: #333;
   --heading-color: #444444;
-  --border-color: #333333;
+  --border-color: #333;
   --feed-color:#ffffff; 
 }
 
 /* Dark mode styles */
 &[data-theme="dark"] {
-  --bg-color: #333333;
-  --navbar-color: #333333;
+  --bg-color: #333;
+  --navbar-color: #444;
   --searchbar-color:#ffffff;
   --text-color: #ffffff;
   --heading-color: #dddddd;
-  --border-color: #333333;
-  --feed-color:#333333; 
+  --border-color: #333;
+  --feed-color:#444; 
 }
     }
 

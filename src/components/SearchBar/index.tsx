@@ -4,9 +4,10 @@ import { CiSearch } from "react-icons/ci";
 // Types
 type Props = {
   setSearchQuery: any;
+  setPage: any;
 }
 
-const SearchBar: React.FC<Props> = ({ setSearchQuery }) => {
+const SearchBar: React.FC<Props> = ({ setSearchQuery, setPage }) => {
   const [state, setState] = useState("");
   const handleChange = (e:any) => {
     setState(e.currentTarget.value);
@@ -21,9 +22,10 @@ const SearchBar: React.FC<Props> = ({ setSearchQuery }) => {
     }
     const timer = setTimeout(() => {
       setSearchQuery(state);
+      setPage(1);
     }, 1000);
     return () => clearTimeout(timer);
-  }, [setSearchQuery, state]);
+  }, [setSearchQuery, state, setPage]);
 
   return (
     <React.Fragment>

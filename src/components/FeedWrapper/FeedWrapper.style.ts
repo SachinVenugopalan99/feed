@@ -5,8 +5,6 @@ export const Wrapper = styled.main`
   height: 100%;
   width:45%;
   min-width: 600px;
-  background: var(--feed-color);
-  border-radius: 30px;
 
     @media (max-width: 600px) {
     min-width: 100%;
@@ -24,14 +22,15 @@ export const Wrapper = styled.main`
     display: flex;
   }
 
-  .movies {
+  .feeds {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    gap: 30px 20px;
+    gap: 20px;
     min-height: 90vh;
   }
 
-  .no_movies {
+  .no_feeds {
     text-align: center;
     margin-top: 70px;
     font-weight: 400;

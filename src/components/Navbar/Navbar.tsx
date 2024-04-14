@@ -5,9 +5,10 @@ import { useTheme } from '../../hooks/useThemeContext';
 
 interface NavBarProps {
  setSearchQuery: any;
+ setPage: any;
 }
 
-const Navbar:FC<NavBarProps> = ({ setSearchQuery}) => {
+const Navbar:FC<NavBarProps> = ({ setSearchQuery, setPage}) => {
 
   const {theme, toggleTheme} = useTheme();
 
@@ -17,7 +18,7 @@ const Navbar:FC<NavBarProps> = ({ setSearchQuery}) => {
 
   return (
     <NavWrapper>
-        <SearchBar setSearchQuery={setSearchQuery}/>
+        <SearchBar setSearchQuery={setSearchQuery} setPage={setPage}/>
       <div className="mode-switch">
         <label>
           <input

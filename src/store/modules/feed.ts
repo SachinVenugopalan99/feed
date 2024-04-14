@@ -42,7 +42,7 @@ export const actions = {
         try{
         
         const response = await feedAPi.users();
-        dispatch(slice.actions.setUsers(response));
+        dispatch(slice.actions.setUsers(response?.data));
 
         } catch(err) {
             console.error(err);
