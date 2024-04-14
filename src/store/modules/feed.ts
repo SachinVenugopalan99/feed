@@ -8,7 +8,12 @@ const initialState={
     users: null,
     feeds: null,
     feedById: null,
-    isFeedsLoading: false
+    isFeedsLoading: false,
+    scrollPosition: null,
+    stopFecthing: false,
+    feedData: [],
+    feedCurrentPage: 1,
+    feedIncludedPages: null
 }
 
 const slice = createSlice({
@@ -26,6 +31,21 @@ const slice = createSlice({
         },
         setIsFeedLoading(state, {payload}) {
             state.isFeedsLoading = payload
+        },
+        setScrollPosition(state, {payload}) {
+            state.scrollPosition = payload;
+        },
+        setStopFetching(state, {payload}) {
+            state.stopFecthing = payload;
+        },
+        setFeedData(state, {payload}) {
+            state.feedData = payload
+        },
+        setFeedCurrentPage(state, {payload}) {
+            state.feedCurrentPage = payload;
+        },
+        setFeedIncludedPages(state, {payload}) {
+            state.feedIncludedPages = payload;
         }
     },
     extraReducers: (builder) => {
@@ -64,11 +84,46 @@ export const actions = {
         feedById: (id: any) => async (dispatch: any) => {
         try{
         const response = await feedAPi.feedById(id);
-        dispatch(slice.actions.setFeedById(response));
+        dispatch(slice.actions.setFeedById(response?.data));
         } catch(err) {
             console.error(err);
         }
+    },
+    scrollPosition: (value: any) => async (dispatch: any) => {
+     try{
+    dispatch(slice.actions.setScrollPosition(value));
+     } catch(err) {
+        console.error(err);
+     }
+    },
+    stopFecthing: (value: any) => async(dispatch: any) => {
+        try{
+        dispatch(slice.actions.setStopFetching(value));
+        } catch (err) {
+            console.error(err)
+        }
+    },
+    setFeedData: (value: any) => async(dispatch: any) => {
+        try{
+        dispatch(slice.actions.setFeedData(value));
+        } catch (err) {
+            console.error(err)
+        }
+    },
+    setFeedCurrentPage: (value: any) => async(dispatch: any) => {
+    try{
+    dispatch(slice.actions.setFeedCurrentPage(value));
+    } catch (err) {
+        console.error(err)
     }
+    },
+    setFeedIncludedPages: (value: any) => async(dispatch: any) => {
+    try{
+    dispatch(slice.actions.setFeedIncludedPages(value));
+    } catch (err) {
+        console.error(err)
+    }
+    },
 }
 
 const getters = {
@@ -88,6 +143,26 @@ const getters = {
     const state = rootState[name];
     return state.isFeedsLoading;
    },
+   scrollPosition(rootState: any) {
+    const state = rootState[name];
+    return state.scrollPosition;
+   },
+   stopFecthing(rootState: any) {
+    const state = rootState[name];
+    return state.stopFecthing;
+   },
+   feedData(rootState: any) {
+    const state = rootState[name];
+    return state.feedData;
+   },
+    feedCurrentPage(rootState: any) {
+    const state = rootState[name];
+    return state.feedCurrentPage;
+   },
+   feedIncludedPages(rootState: any) {
+    const state = rootState[name];
+    return state.feedIncludedPages;
+   }
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export

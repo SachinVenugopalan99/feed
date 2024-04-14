@@ -1,36 +1,51 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Wrapper, Content } from "./SearchBar.styles";
-import { CiSearch } from "react-icons/ci";
+import searchIcon from '../../assets/search-icon.svg';
 // Types
 type Props = {
   setSearchQuery: any;
   setPage: any;
+  setIncludedPages: any;
 }
 
-const SearchBar: React.FC<Props> = ({ setSearchQuery, setPage }) => {
+const SearchBar: React.FC<Props> = ({ setSearchQuery, setPage, setIncludedPages }) => {
   const [state, setState] = useState("");
-  const handleChange = (e:any) => {
-    setState(e.currentTarget.value);
-  };
 
   const initial = useRef(true);
 
-  useEffect(() => {
-    if (initial.current) {
-      initial.current = false;
-      return;
-    }
-    const timer = setTimeout(() => {
-      setSearchQuery(state);
+  const debounce = (func: any, delay: any) => {
+    let timeoutId: any;
+    return (...args: any) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+
+const handleSearch = (val: any) => {
+      setSearchQuery(val);
+      if (val) {
       setPage(1);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [setSearchQuery, state, setPage]);
+      setIncludedPages({})
+      }
+}
+
+    const s = debounce(handleSearch, 1500);
+
+    const handleChange = (event: any) => {
+    const { value } = event.target;
+    setState(value);
+    s(value);
+  };
 
   return (
     <React.Fragment>
       <Wrapper>
         <Content>
+          <img src={searchIcon} alt="search" />
           <input
             type="text"
             placeholder="Search "

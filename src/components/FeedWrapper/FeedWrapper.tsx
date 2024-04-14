@@ -1,6 +1,8 @@
-import React, {FC} from 'react'
+import React, {FC, useRef} from 'react'
 import { Wrapper } from './FeedWrapper.style'
 import Feed from '../Feed/Feed'
+import { useVirtualizer } from '@tanstack/react-virtual';
+
 
 interface FeedWrapperProps{
 data: any;
@@ -8,15 +10,24 @@ isFeedsLoading: boolean;
 }
 
 const FeedWrapper:FC<FeedWrapperProps> = ({data, isFeedsLoading}) => {
+  const parentRef = useRef(null);
+
+    const virtualizer = useVirtualizer({
+    count: data?.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 35, // Estimate item height
+    overscan: 5,
+  });
+
   return (
           <Wrapper>
       {data?.length ? (
         <div>
-      <div className='feeds '>
-        {data?.map((feed: any) => (
+      <div className='feeds' ref={parentRef}>
+        {virtualizer?.getVirtualItems()?.map((feed: any) => (
             <Feed
-              feedData={feed}
-              key={feed?.id}
+              feedData={data[feed?.index]}
+              key={data[feed?.index]?.id}
             />
         ))}
             </div>

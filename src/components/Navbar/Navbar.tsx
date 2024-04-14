@@ -4,11 +4,13 @@ import SearchBar from '../SearchBar';
 import { useTheme } from '../../hooks/useThemeContext';
 
 interface NavBarProps {
- setSearchQuery: any;
- setPage: any;
+ setSearchQuery?: any;
+ setPage?: any;
+ hideSearch?: boolean;
+ setIncludedPages?: any;
 }
 
-const Navbar:FC<NavBarProps> = ({ setSearchQuery, setPage}) => {
+const Navbar:FC<NavBarProps> = ({ setSearchQuery, setPage, hideSearch= false, setIncludedPages}) => {
 
   const {theme, toggleTheme} = useTheme();
 
@@ -18,7 +20,7 @@ const Navbar:FC<NavBarProps> = ({ setSearchQuery, setPage}) => {
 
   return (
     <NavWrapper>
-        <SearchBar setSearchQuery={setSearchQuery} setPage={setPage}/>
+      {!hideSearch ? <SearchBar setSearchQuery={setSearchQuery} setIncludedPages={setIncludedPages} setPage={setPage}/> : null}
       <div className="mode-switch">
         <label>
           <input

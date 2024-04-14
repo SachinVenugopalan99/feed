@@ -10,12 +10,17 @@ export const useFetchFeedPost = () => {
   const feeds = feedRedux.getters.feeds(rootState);
   const users = feedRedux.getters.users(rootState);
   const isFeedsLoading = feedRedux.getters.isfeedsLoading(rootState);
+  const feedData = feedRedux.getters.feedData(rootState);
+  const feedCurrentPage = feedRedux.getters.feedCurrentPage(rootState);
+  const feedIncludedPages = feedRedux.getters.feedIncludedPages(rootState);
+
+  console.log(feedCurrentPage);
+  console.log(feedIncludedPages);
 
   // State for storing the list of items
-  const [data, setData] = useState<any>([]);
   // State for search and filter query params
   const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialFeed = useRef(true);
   const initialUsers = useRef(true);
@@ -23,22 +28,34 @@ export const useFetchFeedPost = () => {
   const LIMIT = 10;
 
   const fetchData = useCallback(async () => {
-try{
-    const response = await dispatch(feedRedux.actions.feeds({ limit: LIMIT, query: searchQuery, page: page }));
+    try{
+    setIsLoading(true);
+    const response: any = await dispatch(feedRedux.actions.feeds({ limit: LIMIT, query: searchQuery, page: feedCurrentPage }));
     // Update the data state with the fetched data
     if (response) {
-    let feedPosts = [];
+    let feedPosts: any = [...feedData];
     if (searchQuery) {
       feedPosts= [...response?.data];
     } else {
-        feedPosts =  [...data, ...response?.data?.data];
+       const includedPages = {...feedIncludedPages};
+        if (!includedPages.hasOwnProperty(response?.data?.pagination?.page)) {
+        feedPosts =  [...feedData, ...response?.data?.data];  
+        includedPages[response?.data?.pagination?.page] = true;
+        console.log(includedPages);
+        dispatch(feedRedux.actions.setFeedIncludedPages(includedPages));
+        }
     }
-     setData(feedPosts);
+     dispatch(feedRedux.actions.setFeedData(feedPosts));
+     sessionStorage.setItem("data", JSON.stringify(feedData));
+     sessionStorage.setItem("page", JSON.stringify(feedCurrentPage));
+     sessionStorage.setItem("includedPages", JSON.stringify(feedIncludedPages));
     }
       } catch(err) {
       console.error(err);
+      } finally {
+        setIsLoading(false);
       }
-  }, [data, dispatch, searchQuery, page]);
+  }, [feedData, searchQuery, feedCurrentPage, feedIncludedPages]);
 
   const fetchUsers = useCallback(async() => {
   try {
@@ -54,7 +71,7 @@ try{
       return
     }
     fetchData();
-  },[page, searchQuery])
+  },[feedCurrentPage, searchQuery])
 
   useEffect(() => {
     if (initialUsers.current) {
@@ -64,17 +81,28 @@ try{
    fetchUsers()
   },[fetchUsers])
 
+  //   useEffect(() => {
+  //   if (stopFecthing && !initialFeed.current) {
+  //     const storageData = JSON.parse(sessionStorage.getItem('data') as any);
+  //     const storagePage = JSON.parse(sessionStorage.getItem('page'as string) as any);
+  //     const storageIncludedPages = JSON.parse(sessionStorage.getItem('includedPages'as string) as any);
+  //    dispatch(feedRedux.actions.setFeedData(storageData));
+  //    dispatch(feedRedux.actions.setFeedCurrentPage(storagePage));
+  //     dispatch(feedRedux.actions.setFeedIncludedPages(storageIncludedPages));
+  //   }
+  // },[stopFecthing])
+
   // Implement the infinite scroll event handler
   const handleScroll = useCallback(() => {
     const scrollPosition = window.innerHeight + window.scrollY;
     const documentHeight = document.body.scrollHeight;
 
     // Check if the user has scrolled to the bottom of the page
-    if (scrollPosition >= documentHeight - 100 && feeds?.data?.pagination?.hasMore && !isFeedsLoading) {
-      setPage((prev) => prev + 1);
+    if (scrollPosition >= documentHeight - 100 && feeds?.data?.pagination?.hasMore && !isFeedsLoading && !isLoading) {
+     dispatch(feedRedux.actions.setFeedCurrentPage(feedCurrentPage + 1));
     }
 
-  }, [feeds, isFeedsLoading]);
+  }, [feeds, isFeedsLoading, isLoading, feedCurrentPage, dispatch]);
 
   // Attach the scroll event listener
   useEffect(() => {
@@ -85,7 +113,16 @@ try{
       window.removeEventListener('scroll', handleScroll);
     };
   }, [handleScroll]);
+
+  const setIncludedPages = useCallback((val: any) => {
+    dispatch(feedRedux.actions.setFeedIncludedPages(val));
+  }, [dispatch])
+
+    const setPage = useCallback((val: any) => {
+    dispatch(feedRedux.actions.setFeedCurrentPage(val));
+  }, [dispatch])
+
   return {
-    data : data, setSearchQuery, searchQuery, setPage, setData, isFeedsLoading, users
+    data : feedData, setSearchQuery, setIncludedPages, searchQuery, setPage, isFeedsLoading, users
   }
 }

@@ -14,11 +14,10 @@ const UsersWrapper:FC<UsersWrapperProps> = ({users}) => {
         <div>
       <div className='userWrapper'>
         {users?.map((user: any) => (
-          <div className='user'>
+          <div className='user' key={user?.id}>
             <Avatar
               imgSrc={user?.profilePictureUrl}
               userName={user?.name}
-              key={user?.id}
             />
             <h3>{user?.name}</h3>
          </div>

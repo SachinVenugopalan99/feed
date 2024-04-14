@@ -9,6 +9,7 @@ export const Wrapper = styled.main`
     @media (max-width: 600px) {
     min-width: 100%;
     width: 100%;
+    padding: 0px 10px;
     }
 
   .movieContainer{
