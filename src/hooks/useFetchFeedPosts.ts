@@ -10,9 +10,6 @@ export const useFetchFeedPost = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
-  const initialFeed = useRef(true);
-  const initialUsers = useRef(true);
-
   const dispatch = useDispatch();
   const rootState = useSelector((state) => state);
 
@@ -65,19 +62,11 @@ export const useFetchFeedPost = () => {
   }, [dispatch])
 
   useEffect(() => {
-    if (initialFeed.current) {
-      initialFeed.current = false;
-      return
-    }
     fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[feedCurrentPage, searchQuery])
 
   useEffect(() => {
-    if (initialUsers.current) {
-      initialUsers.current = false;
-      return
-    }
    fetchUsers()
   },[fetchUsers])
 
@@ -95,7 +84,7 @@ export const useFetchFeedPost = () => {
   }, []);
 
     useEffect(() => {
-    if (!isOnline && !initialFeed.current) {
+    if (!isOnline) {
       const storageData = JSON.parse(sessionStorage.getItem('data') as any);
       const storagePage = JSON.parse(sessionStorage.getItem('page'as string) as any);
       const storageIncludedPages = JSON.parse(sessionStorage.getItem('includedPages'as string) as any);
