@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, memo } from "react";
 import { Wrapper, Content } from "./SearchBar.styles";
 import searchIcon from '../../assets/search-icon.svg';
