@@ -1,7 +1,7 @@
 {
   "name": "feed-post",
   "version": "0.1.0",
-  "homepage": "http://SachinVenugopalan99.github.io/feed",
+  "homepage": "https://SachinVenugopalan99.github.io/feed",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
