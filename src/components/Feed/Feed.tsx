@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react'
+import React, {FC, useCallback, memo} from 'react'
 import { MainWrapper } from './Feed.style';
 import Avatar from '../Avatar/Avatar';
 import { formatDate } from '../../utils/util';
@@ -24,12 +24,12 @@ const Feed:FC<FeedProps> = ({feedData, showBackButton=false}) => {
   }, [feedData, navigate])
 
   const handleBack = useCallback(() => {
-   dispatch(feedRedux.actions.scrollPosition(window.pageYOffset));
+   dispatch(feedRedux.actions.scrollPosition(feedData?.id));
    navigate(-1);
-  }, [navigate, dispatch])
+  }, [navigate, dispatch, feedData])
 
   return (
-    <MainWrapper onClick={handleClick}>
+    <MainWrapper onClick={handleClick} id={feedData?.id}>
       {showBackButton ? 
       <div role='button' className='backButton' onClick={() => handleBack()}>
         <img src={backButton} alt='back'/>
@@ -48,7 +48,7 @@ const Feed:FC<FeedProps> = ({feedData, showBackButton=false}) => {
           (
           <img className={feedData?.attachments?.length === 1 ? 'single_image' : ''} src={feedData?.attachments?.[0]?.url || defaultBackground} loading='lazy' alt="First" width={feedData?.attachments?.length > 1 ? '50%' : '100%'} />
           )  : (
-          <video className={`videoimg ${feedData?.attachments?.length === 1 ? 'single_video' : ''}`} src={feedData?.attachments?.[0]?.url} controls width={feedData?.attachments?.length > 1 ? '50%' : '100%'}/> 
+          <video className={`videoimg ${feedData?.attachments?.length === 1 ? 'single_video' : ''}`} preload="none" poster={defaultBackground} src={feedData?.attachments?.[0]?.url} controls width={feedData?.attachments?.length > 1 ? '50%' : '100%'}/> 
           )
           } 
           {feedData?.attachments?.length > 1 ? 
@@ -58,15 +58,15 @@ const Feed:FC<FeedProps> = ({feedData, showBackButton=false}) => {
           (
           <img src={feedData?.attachments?.[1]?.url || defaultBackground} loading='lazy' alt="Second" width='100%' height={feedData?.attachments?.length > 2 ? '50%' : '100%'} />
           )  : (
-          <video className='videoimg' src={feedData?.attachments?.[1]?.url} controls width='100%' height={feedData?.attachments?.length > 2 ? '50%' : '100%'}/> 
+          <video className='videoimg' preload="none" poster={defaultBackground} src={feedData?.attachments?.[1]?.url} controls width='100%' height={feedData?.attachments?.length > 2 ? '50%' : '100%'}/> 
           )
           } 
           {feedData?.attachments?.[2] ? 
           feedData?.attachments?.[2]?.type === 'image' ? 
           (
-          <img src={feedData?.attachments?.[2]?.url || defaultBackground} loading='lazy' alt="Second" width='100%' height='50%' />
+          <img src={feedData?.attachments?.[2]?.url || defaultBackground} loading='lazy' alt="Third" width='100%' height='50%' />
           )  : (
-          <video className='videoimg' src={feedData?.attachments?.[2]?.url} controls width='100%' height='50%' /> 
+          <video className='videoimg' preload="none" poster={defaultBackground} src={feedData?.attachments?.[2]?.url} controls width='100%' height='50%' /> 
           )
            : null}
           </>
@@ -80,4 +80,4 @@ const Feed:FC<FeedProps> = ({feedData, showBackButton=false}) => {
   )
 }
 
-export default Feed
+export default memo(Feed)

@@ -1,4 +1,4 @@
-import React, {FC, useRef} from 'react'
+import React, {FC, useRef, memo} from 'react'
 import { Wrapper } from './FeedWrapper.style'
 import Feed from '../Feed/Feed'
 import { useVirtualizer } from '@tanstack/react-virtual';
@@ -20,7 +20,7 @@ const FeedWrapper:FC<FeedWrapperProps> = ({data, isFeedsLoading}) => {
   });
 
   return (
-          <Wrapper>
+    <Wrapper>
       {data?.length ? (
         <div>
       <div className='feeds' ref={parentRef}>
@@ -38,35 +38,7 @@ const FeedWrapper:FC<FeedWrapperProps> = ({data, isFeedsLoading}) => {
         <h1 className='no_feeds'>There are no feeds!</h1>
       )}
     </Wrapper>
-    //     <Wrapper>
-    //   {data?.length ? (
-    //     <div>
-    //     {data?.map((movie: any) => (
-    //         <div className='movieContainer' id={String(movie?.year)}>
-    //           <div className='heading'>
-    //          {movie?.year}
-    //           </div>
-    //           <div className='movies '>
-
-    //       {/* {movie?.movies?.map((item: any) => (      
-    
-    //         <Movie
-    //           movie={item}
-    //           key={Math.floor(Math.random() * item.id * Date.now())}
-    //         />
-    //       ))} */}
-    //         </div>
-    //         </div>
-    //     ))}
-
-    //     </div>
-
-    //   ) : (
-    //     <h1 className='no_movies'>There are no search results for the post!</h1>
-    //   )}
-    // </Wrapper>
-
   )
 }
 
-export default FeedWrapper
+export default memo(FeedWrapper);

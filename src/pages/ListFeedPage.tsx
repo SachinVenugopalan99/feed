@@ -1,4 +1,4 @@
-import React, {useEffect, Fragment, useCallback} from 'react';
+import React, {useEffect, memo} from 'react';
 import PageContainer from '../components/PageContainer/PageContainer';
 import Navbar from '../components/Navbar/Navbar';
 import FeedWrapper from '../components/FeedWrapper/FeedWrapper';
@@ -18,11 +18,10 @@ const ListFeedPage = () => {
 
     useEffect(() => {
     if (scrollPosition) {
-          window.scrollTo({
-            top: scrollPosition,
-            behavior: "smooth"
-          })
-      // dispatch(feedRedux.actions.stopFecthing(false));
+          const element = document.getElementById(scrollPosition);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
     }
     }, [scrollPosition, dispatch])
 
@@ -37,4 +36,4 @@ const ListFeedPage = () => {
   )
 }
 
-export default ListFeedPage
+export default memo(ListFeedPage);

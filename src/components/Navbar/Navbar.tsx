@@ -1,4 +1,4 @@
-import React, {FC, useCallback} from 'react'
+import React, {FC, useCallback, memo} from 'react'
 import { NavWrapper } from './Navbar.style';
 import SearchBar from '../SearchBar';
 import { useTheme } from '../../hooks/useThemeContext';
@@ -22,17 +22,19 @@ const Navbar:FC<NavBarProps> = ({ setSearchQuery, setPage, hideSearch= false, se
     <NavWrapper>
       {!hideSearch ? <SearchBar setSearchQuery={setSearchQuery} setIncludedPages={setIncludedPages} setPage={setPage}/> : null}
       <div className="mode-switch">
-        <label>
+      <label htmlFor='switch'>
           <input
             type="checkbox"
             onChange={toggleMode}
             checked={theme === "dark"}
+            id='switch'
           />
           <span className="slider round"></span>
+          <span className='sliderText'>{theme === "dark" ? 'Dark' : 'Light'}</span>
         </label>
       </div>
     </NavWrapper>
   )
 }
 
-export default Navbar
+export default memo(Navbar)

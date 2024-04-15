@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useCallback, memo } from "react";
 import { Wrapper, Content } from "./SearchBar.styles";
 import searchIcon from '../../assets/search-icon.svg';
+import { debounce } from "../../utils/util";
+
 // Types
 type Props = {
   setSearchQuery: any;
@@ -9,23 +11,9 @@ type Props = {
 }
 
 const SearchBar: React.FC<Props> = ({ setSearchQuery, setPage, setIncludedPages }) => {
-  const [state, setState] = useState("");
 
-  const initial = useRef(true);
-
-  const debounce = (func: any, delay: any) => {
-    let timeoutId: any;
-    return (...args: any) => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  };
-
-const handleSearch = (val: any) => {
+const handleResult = (val: any) => {
+     console.log(val);
       setSearchQuery(val);
       if (val) {
       setPage(1);
@@ -33,13 +21,8 @@ const handleSearch = (val: any) => {
       }
 }
 
-    const s = debounce(handleSearch, 1500);
+  const handleSearch = useCallback(debounce((inputVal: any) => handleResult(inputVal), 500), []);
 
-    const handleChange = (event: any) => {
-    const { value } = event.target;
-    setState(value);
-    s(value);
-  };
 
   return (
     <React.Fragment>
@@ -49,13 +32,13 @@ const handleSearch = (val: any) => {
           <input
             type="text"
             placeholder="Search "
-            onChange={handleChange}
-            value={state}
-          />
+            onChange={(e) => handleSearch(e.target.value)}
+            aria-label="Search"          
+            />
         </Content>
       </Wrapper>
     </React.Fragment>
   );
 };
 
-export default SearchBar;
+export default memo(SearchBar);

@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import avatar from '../../assets/avatar.svg';
 import { Wrapper } from './Avatar.style';
 
@@ -16,4 +16,4 @@ const Avatar:FC<AvatarProps> = ({imgSrc, userName}) => {
   )
 }
 
-export default Avatar
+export default memo(Avatar)

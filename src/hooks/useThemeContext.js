@@ -17,6 +17,7 @@ export const ThemeProvider = ({children}) => {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDarkMode]);
 
   return (

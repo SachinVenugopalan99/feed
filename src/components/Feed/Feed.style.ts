@@ -81,7 +81,7 @@ export const MainWrapper = styled.main`
     gap: 5px;
     display: flex;
     flex-direction: row;
-        img{
+    img{
       width: 50%;
       height: 100%
     }

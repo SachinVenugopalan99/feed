@@ -4,6 +4,15 @@ import feedRedux from '../store/modules/feed';
 
 export const useFetchFeedPost = () => {
 
+  // State for storing the list of items
+  // State for search and filter query params
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  const initialFeed = useRef(true);
+  const initialUsers = useRef(true);
+
   const dispatch = useDispatch();
   const rootState = useSelector((state) => state);
 
@@ -13,17 +22,6 @@ export const useFetchFeedPost = () => {
   const feedData = feedRedux.getters.feedData(rootState);
   const feedCurrentPage = feedRedux.getters.feedCurrentPage(rootState);
   const feedIncludedPages = feedRedux.getters.feedIncludedPages(rootState);
-
-  console.log(feedCurrentPage);
-  console.log(feedIncludedPages);
-
-  // State for storing the list of items
-  // State for search and filter query params
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  const initialFeed = useRef(true);
-  const initialUsers = useRef(true);
 
   const LIMIT = 10;
 
@@ -55,6 +53,7 @@ export const useFetchFeedPost = () => {
       } finally {
         setIsLoading(false);
       }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feedData, searchQuery, feedCurrentPage, feedIncludedPages]);
 
   const fetchUsers = useCallback(async() => {
@@ -71,6 +70,7 @@ export const useFetchFeedPost = () => {
       return
     }
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[feedCurrentPage, searchQuery])
 
   useEffect(() => {
@@ -81,16 +81,29 @@ export const useFetchFeedPost = () => {
    fetchUsers()
   },[fetchUsers])
 
-  //   useEffect(() => {
-  //   if (stopFecthing && !initialFeed.current) {
-  //     const storageData = JSON.parse(sessionStorage.getItem('data') as any);
-  //     const storagePage = JSON.parse(sessionStorage.getItem('page'as string) as any);
-  //     const storageIncludedPages = JSON.parse(sessionStorage.getItem('includedPages'as string) as any);
-  //    dispatch(feedRedux.actions.setFeedData(storageData));
-  //    dispatch(feedRedux.actions.setFeedCurrentPage(storagePage));
-  //     dispatch(feedRedux.actions.setFeedIncludedPages(storageIncludedPages));
-  //   }
-  // },[stopFecthing])
+    useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+    useEffect(() => {
+    if (!isOnline && !initialFeed.current) {
+      const storageData = JSON.parse(sessionStorage.getItem('data') as any);
+      const storagePage = JSON.parse(sessionStorage.getItem('page'as string) as any);
+      const storageIncludedPages = JSON.parse(sessionStorage.getItem('includedPages'as string) as any);
+     dispatch(feedRedux.actions.setFeedData(storageData));
+     dispatch(feedRedux.actions.setFeedCurrentPage(storagePage));
+      dispatch(feedRedux.actions.setFeedIncludedPages(storageIncludedPages));
+    }
+  },[isOnline, dispatch])
 
   // Implement the infinite scroll event handler
   const handleScroll = useCallback(() => {

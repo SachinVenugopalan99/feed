@@ -1,5 +1,4 @@
-import {FC} from 'react'
-import Feed from '../Feed/Feed';
+import {FC, memo} from 'react'
 import { Wrapper } from './UserWrapper.style';
 import Avatar from '../Avatar/Avatar';
 
@@ -31,4 +30,4 @@ const UsersWrapper:FC<UsersWrapperProps> = ({users}) => {
   )
 }
 
-export default UsersWrapper
+export default memo(UsersWrapper);

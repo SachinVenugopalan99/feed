@@ -54,5 +54,8 @@ export const NavWrapper = styled.main`
 .mode-switch input:checked + .slider:before {
   transform: translateX(20px);
 }
+  .sliderText {
+    margin-top:5px;
+  }
     `
     ;
