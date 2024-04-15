@@ -17,7 +17,7 @@ const ListFeedPage = () => {
   const {data, setSearchQuery, setIncludedPages, setPage, isFeedsLoading, users} = useFetchFeedPost();
 
   useEffect(() => {
-    fetch('https://rigi-react-assignment-ii-server-production.up.railway.app/api', {
+    fetch('https://rigi-react-assignment-ii-server-production.up.railway.app/api/users', {
             headers: {'Authorization': 'XM0ooo4EG8puK9EPQ16M3KGxSA3ZsCKS', "Access-Control-Allow-Origin": "*"}
     })
   }, [])
