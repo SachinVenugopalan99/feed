@@ -1,6 +1,7 @@
 {
   "name": "feed-post",
   "version": "0.1.0",
+  "homepage": "http://SachinVenugopalan99.github.io/feeds",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
@@ -25,7 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +52,7 @@
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.77",
     "@types/react-dom": "^18.2.25",
+    "gh-pages": "^6.1.1",
     "typescript": "^5.4.5"
   }
 }
