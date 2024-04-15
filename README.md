@@ -28,3 +28,6 @@ npm start
 
 5. Open your favorite web browser and visit http://localhost:3000 to explore the app.\
    The page will automatically reload when you make changes.
+
+6. Live Link:
+   https://feed-qw9snjlhw-sachin-venugopalans-projects.vercel.app/
